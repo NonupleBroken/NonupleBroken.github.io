@@ -1,0 +1,289 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>正则表达式 | NonupleBroken</title><meta name="description" content="正则表达式 (Regular Expression) 对字符串的匹配很强大也很方便，因此做一些记录。  特殊字符    特殊字符 描述 备注     . 匹配一个除换行符之外的任意字符。    \d 匹配一个数字。等价于 [0-9]。    \D 匹配一个非数字。等价于 [^0-9]。    \w 匹配一个字母或数字或下划线。 \w 匹配的字母不止英文字母，因此比 [A-Za-z0-9_] 范围更"><meta name="keywords" content="Regular Expression"><meta name="author" content="NonupleBroken"><meta name="copyright" content="NonupleBroken"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="https://i.loli.net/2020/06/15/yNt2zEPRqjwh7IO.png"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="dns-prefetch" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="crossorigin"/><link rel="dns-prefetch" href="https://fonts.googleapis.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="dns-prefetch" href="//busuanzi.ibruce.info"/><meta name="twitter:card" content="summary"><meta name="twitter:title" content="正则表达式"><meta name="twitter:description" content="正则表达式 (Regular Expression) 对字符串的匹配很强大也很方便，因此做一些记录。  特殊字符    特殊字符 描述 备注     . 匹配一个除换行符之外的任意字符。    \d 匹配一个数字。等价于 [0-9]。    \D 匹配一个非数字。等价于 [^0-9]。    \w 匹配一个字母或数字或下划线。 \w 匹配的字母不止英文字母，因此比 [A-Za-z0-9_] 范围更"><meta name="twitter:image" content="https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images&amp;r=正则表达式"><meta property="og:type" content="article"><meta property="og:title" content="正则表达式"><meta property="og:url" content="https://nonuplebroken.com/2019/04/08/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/"><meta property="og:site_name" content="NonupleBroken"><meta property="og:description" content="正则表达式 (Regular Expression) 对字符串的匹配很强大也很方便，因此做一些记录。  特殊字符    特殊字符 描述 备注     . 匹配一个除换行符之外的任意字符。    \d 匹配一个数字。等价于 [0-9]。    \D 匹配一个非数字。等价于 [^0-9]。    \w 匹配一个字母或数字或下划线。 \w 匹配的字母不止英文字母，因此比 [A-Za-z0-9_] 范围更"><meta property="og:image" content="https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images&amp;r=正则表达式"><meta property="article:published_time" content="2019-04-08T09:33:00.000Z"><meta property="article:modified_time" content="2020-06-16T07:16:18.490Z"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>var autoChangeMode = 'false'
+var t = Cookies.get("theme")
+if (autoChangeMode == '1'){
+  var isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+  var isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+  var isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined){
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport){
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour < 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+  }
+  } else if (t == 'light') activateLightMode()
+  else activateDarkMode()
+
+} else if (autoChangeMode == '2'){
+  now = new Date();
+  hour = now.getHours();
+  isNight = hour < 6 || hour >= 18
+  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode() 
+} else {
+  if ( t == 'dark' ) activateDarkMode()
+  else if ( t == 'light') activateLightMode()
+}
+
+function activateDarkMode(){
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
+  }
+}
+function activateLightMode(){
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
+  }
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><link rel="canonical" href="https://nonuplebroken.com/2019/04/08/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/"><link rel="prev" title="DDCTF2019-WEB签到题" href="https://nonuplebroken.com/2019/04/16/DDCTF2019-WEB%E7%AD%BE%E5%88%B0%E9%A2%98/"><link rel="next" title="docker下搭建web服务器" href="https://nonuplebroken.com/2019/02/03/docker%E4%B8%8B%E6%90%AD%E5%BB%BAweb%E6%9C%8D%E5%8A%A1%E5%99%A8/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: true,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: {"bookmark":{"message_prev":"Press","message_next":"to bookmark this page"},"chs_to_cht":"Traditional Chinese Activated Manually","cht_to_chs":"Simplified Chinese Activated Manually","day_to_night":"Dark Mode Activated Manually","night_to_day":"Light Mode Activated Manually","bgLight":"#49b1f5","bgDark":"#2d3035","position":"top-center"},
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  highlightShrink: 'false',
+  isFontAwesomeV5: false,
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+  
+}</script><script>var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isSidebar: true  
+  }</script><noscript><style>
+#page-header {
+  opacity: 1
+}
+.justified-gallery img{
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 4.2.1"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="https://i.loli.net/2020/06/15/imOPRpIQl1aNYSH.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">28</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">37</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user"></i><span> About</span></a></div></div></div></div><i class="fa fa-arrow-right on" id="toggle-sidebar" aria-hidden="true">     </i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#特殊字符"><span class="toc-number">1.</span> <span class="toc-text"> 特殊字符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#贪婪匹配"><span class="toc-number">2.</span> <span class="toc-text"> 贪婪匹配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#环视"><span class="toc-number">3.</span> <span class="toc-text"> 环视</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分组语法捕获"><span class="toc-number">4.</span> <span class="toc-text"> 分组语法捕获</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注释"><span class="toc-number">5.</span> <span class="toc-text"> 注释</span></a></li></ol></div></div></div><div id="body-wrap"><div class="post-bg" id="nav" style="background-image: url(https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images)"><div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">NonupleBroken</a></span><span class="pull_right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fa fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user"></i><span> About</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span></span></div><div id="post-info"><div id="post-title"><div class="posttitle">正则表达式</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="Created 2019-04-08 17:33:00"><i class="fa fa-calendar" aria-hidden="true"></i> Created 2019-04-08</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="Updated 2020-06-16 15:16:18"><i class="fa fa-history" aria-hidden="true"></i> Updated 2020-06-16</span></time><span class="post-meta__categories"><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/general-skills/">general skills</a></span></div><div class="meta-secondline"> </div><div class="meta-thirdline"><span class="post-meta-pv-cv"><i class="fa fa-eye post-meta__icon" aria-hidden="true"> </i><span>Post View:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-commentcount"></span></div></div></div></div><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><p>正则表达式 (Regular Expression) 对字符串的匹配很强大也很方便，因此做一些记录。</p>
+<h2 id="特殊字符"><a class="markdownIt-Anchor" href="#特殊字符"></a> 特殊字符</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">特殊字符</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">.</td>
+<td style="text-align:left">匹配一个除换行符之外的任意字符。</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">\d</td>
+<td style="text-align:left">匹配一个数字。等价于 [0-9]。</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">\D</td>
+<td style="text-align:left">匹配一个非数字。等价于 [^0-9]。</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">\w</td>
+<td style="text-align:left">匹配一个字母或数字或下划线。</td>
+<td style="text-align:left">\w 匹配的字母不止英文字母，因此比 [A-Za-z0-9_] 范围更广。</td>
+</tr>
+<tr>
+<td style="text-align:center">\W</td>
+<td style="text-align:left">匹配一个非字母或数字或下划线。</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">\s</td>
+<td style="text-align:left">匹配一个任意空白字符，包括空格、制表符、换页符等。等价于 [ \f\n\r\t\v]。</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">\S</td>
+<td style="text-align:left">匹配一个任意非空白字符。等价于 [^ \f\n\r\t\v]。</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">^</td>
+<td style="text-align:left">匹配行的开头。</td>
+<td style="text-align:left">如 ^\d 表示匹配以数字开头的行。</td>
+</tr>
+<tr>
+<td style="text-align:center">$</td>
+<td style="text-align:left">匹配行的结尾。</td>
+<td style="text-align:left">如 \d$ 表示匹配以数字结尾的行。</td>
+</tr>
+<tr>
+<td style="text-align:center">*</td>
+<td style="text-align:left">匹配前面的子表达式零次或多次。</td>
+<td style="text-align:left">如 abc* 能匹配 ab 、 abc 或 abcc 等。</td>
+</tr>
+<tr>
+<td style="text-align:center">+</td>
+<td style="text-align:left">匹配前面的子表达式一次或多次。</td>
+<td style="text-align:left">如 abc+ 能匹配 abc 或 abcc 等，但不能匹配 ab。</td>
+</tr>
+<tr>
+<td style="text-align:center">?</td>
+<td style="text-align:left">匹配前面的子表达式零次或一次。</td>
+<td style="text-align:left">如 abc? 能匹配 ab 或 abc。</td>
+</tr>
+<tr>
+<td style="text-align:center">{n}</td>
+<td style="text-align:left">匹配前面的子表达式 n 次。</td>
+<td style="text-align:left">如 [A-Z]{5} 能匹配 5 个连续的大写字母。</td>
+</tr>
+<tr>
+<td style="text-align:center">{n,}</td>
+<td style="text-align:left">匹配前面的子表达式至少 n 次。</td>
+<td style="text-align:left">如 [a-z]{3,} 能匹配至少 3 个连续的小写字母。</td>
+</tr>
+<tr>
+<td style="text-align:center">{n,m}</td>
+<td style="text-align:left">匹配前面的子表达式 n-m 次。</td>
+<td style="text-align:left">如 \d{4,6} 能匹配 4-6 个连续的数字。</td>
+</tr>
+<tr>
+<td style="text-align:center">(XYZ)</td>
+<td style="text-align:left">将() 中的内容视为一个整体。</td>
+<td style="text-align:left">如 p(abc)+ 将匹配 pabc 或 pabcabc 等。</td>
+</tr>
+<tr>
+<td style="text-align:center">[XYZ]</td>
+<td style="text-align:left">将[] 中为一个集合，匹配该集合中的任意一个字符。</td>
+<td style="text-align:left">可用 - 表示范围，如 [A-Za-z0-9] 能匹配任意大小写英文字母和数字一次。</td>
+</tr>
+<tr>
+<td style="text-align:center">[^XYZ]</td>
+<td style="text-align:left">负值集合，匹配非该集合中的任意一个字符。</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">X|Y</td>
+<td style="text-align:left">匹配 X 或 Y。</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">\b</td>
+<td style="text-align:left">匹配一个单词边界，即单词和空格间的位置。</td>
+<td style="text-align:left">如 \ber 可以匹配 erase，但不能匹配 verb 或 server。</td>
+</tr>
+<tr>
+<td style="text-align:center">\B</td>
+<td style="text-align:left">匹配一个非单词边界。</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">&lt; \&gt;</td>
+<td style="text-align:left">匹配单词的开始 (&lt;) 和结尾 (\&gt;)</td>
+<td style="text-align:left">如 ion\&gt; 可以匹配 onion，但不能匹配 sionox 或 ionic。</td>
+</tr>
+</tbody>
+</table>
+<p>因此需要使用 \ 转义的字符有  <code>|</code> <code>\</code> <code>[</code> <code>]</code> <code>{</code> <code>}</code> <code>(</code> <code>)</code> <code>?</code> <code>+</code> <code>.</code> <code>*</code> <code>^</code> <code>$</code></p>
+<h2 id="贪婪匹配"><a class="markdownIt-Anchor" href="#贪婪匹配"></a> 贪婪匹配</h2>
+<p>正则默认是进行贪婪匹配，意思是会匹配最长的符合条件的子串。<br />
+如在匹配注释时使用：<code>/\*.*\*/</code> 可匹配 C 语言中 <code>/*xxxxxxxxx*/</code> 的块注释。<br />
+但如果有以下内容：<br />
+<code>/*aaaaaaaaaaa*/ xxxxxxx /*bbbbbbbbbbbbbbb*/ yyyyyyy /*ccccccccc*/</code><br />
+使用 <code>/\*.*\*/</code> 会全部匹配，但如果在 <code>*</code> 或 <code>+</code> 等通配符后加一个 <code>?</code>，则会进行最短匹配。<br />
+即 <code>/\*.*？\*/</code> 可匹配 <code>/*aaaaaaaaaaa*/</code> 、<code>/*bbbbbbbbbbbbbbb*/</code> 和 <code>/*ccccccccc*/</code>。</p>
+<h2 id="环视"><a class="markdownIt-Anchor" href="#环视"></a> 环视</h2>
+<p>有时需要检查 pattern 前或后的字符串是否符合，但又不想匹配他们，因此就需要用到环视。环视包括前瞻和后顾，都包括肯定或否定。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">特殊字符</th>
+<th style="text-align:center">描述</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">(?=pattern)</td>
+<td style="text-align:center">后顾肯定检查</td>
+<td style="text-align:left">如 abc(?=x)会匹配到 abcx 中的 abc，而非 abcd 中的 abc</td>
+</tr>
+<tr>
+<td style="text-align:center">(?!pattern)</td>
+<td style="text-align:center">后顾否定检查</td>
+<td style="text-align:left">如 abc(?!x)会匹配到 abcd 中的 abc，而非 abcx 中的 abc</td>
+</tr>
+<tr>
+<td style="text-align:center">(?&lt;=pattern)</td>
+<td style="text-align:center">前瞻肯定检查</td>
+<td style="text-align:left">如 (?&lt;=x)abc会匹配到 xabc 中的 abc，而非 aabc 中的 abc</td>
+</tr>
+<tr>
+<td style="text-align:center">(?&lt;!pattern)</td>
+<td style="text-align:center">前瞻否定检查</td>
+<td style="text-align:left">如 (?&lt;!x)abc会匹配到 aabc 中的 abc，而非 xabc 中的 abc</td>
+</tr>
+</tbody>
+</table>
+<p>值得注意的是，环视是非获取匹配，例如 CD(?=EF)G 是匹配不到 CDEFG 的，要用 CD(?=EF)E 才可以。</p>
+<h2 id="分组语法捕获"><a class="markdownIt-Anchor" href="#分组语法捕获"></a> 分组语法捕获</h2>
+<p>这里就不得不说后向引用的概念。</p>
+<p>使用小括号指定一个子表达式后，匹配这个子表达式的文本可以在表达式或其它程序中作进一步的处理。默认情况下，每个分组会自动拥有一个组号，规则是：从左向右，以分组的左括号为标志，第一个出现的分组的组号为1，第二个为2，以此类推。</p>
+<p>后向引用用于重复搜索前面某个分组匹配的文本。</p>
+<p>比如 要匹配这个字符串 <code>Hello world? Hello world!</code>，就可以用 <code>(Hello) (world)\? \1 \2\!</code>，其中 <code>\1</code> 和 <code>\2</code> 就是正则中前面用小括号括起来的组号。</p>
+<p>这时候就有 <code>(?:pattern)</code>，匹配 pattern，不捕获匹配的文本。这时 <code>(?:Hello) (world)\? \1</code> 中的 <code>\1</code> 就是 world 了。</p>
+<p>还有 <code>(?&lt;name&gt;pattern)</code>，匹配 pattern，并捕获文本到名称为 name 的组里，也可以写成(?'name’exp)。</p>
+<h2 id="注释"><a class="markdownIt-Anchor" href="#注释"></a> 注释</h2>
+<p><code>(?#comment)</code> 这种不对正则表达式的处理产生任何影响，只是为了提供让人阅读注释。</p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">NonupleBroken</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://nonuplebroken.com/2019/04/08/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">https://nonuplebroken.com/2019/04/08/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Regular-Expression/">Regular Expression</a></div><div class="post_share"><div class="social-share" data-image="https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images&amp;r=2021津门杯justOCB" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"/><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script></div></div><div class="post-reward"><a class="reward-button button--primary button--animated"> <i class="fa fa-qrcode"></i> Donate<div class="reward-main"><ul class="reward-all"><li class="reward-item"><img class="post-qr-code__img" src="https://i.loli.net/2020/06/15/IhSBM3Q576veJYy.png" alt="WeChat Pay"/><div class="post-qr-code__desc">WeChat Pay</div></li><li class="reward-item"><img class="post-qr-code__img" src="https://i.loli.net/2020/06/15/SI8vipmr2UCxbtR.png" alt="Alipay"/><div class="post-qr-code__desc">Alipay</div></li></ul></div></a></div><nav class="pagination_post" id="pagination"><div class="prev-post pull_left"><a href="/2019/04/16/DDCTF2019-WEB%E7%AD%BE%E5%88%B0%E9%A2%98/"><img class="prev_cover" src="https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images&amp;r=DDCTF2019-WEB签到题" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">DDCTF2019-WEB签到题</div></div></a></div><div class="next-post pull_right"><a href="/2019/02/03/docker%E4%B8%8B%E6%90%AD%E5%BB%BAweb%E6%9C%8D%E5%8A%A1%E5%99%A8/"><img class="next_cover" src="https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images&amp;r=docker下搭建web服务器" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">docker下搭建web服务器</div></div></a></div></nav><hr><div id="post-comment"><div class="comment_headling"><i class="fa fa-comments fa-fw" aria-hidden="true"></i><span> Comment</span></div><div class="vcomment" id="vcomment"></div><script src="https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script><script>var requestSetting = function (from,set) {
+  var from = from
+  var setting = set.split(',').filter(function(item){
+  return from.indexOf(item) > -1
+  });
+  setting = setting.length == 0 ? from :setting;
+  return setting
+}
+
+var guestInfo = requestSetting(['nick','mail','link'],'nick,mail,link')
+var requiredFields = requestSetting(['nick','mail','link'],'nick')
+
+window.valine = new Valine({
+  el:'#vcomment',
+  appId: 'W5gBlULjrFdLa2PMBAsaecvL-gzGzoHsz',
+  appKey: 'e7tEGcjJPX1J35kwFEqnWK0X',
+  notify: false,
+  verify: false,
+  placeholder: 'Please leave your footprints',
+  avatar: 'identicon',
+  meta: guestInfo,
+  pageSize: '10',
+  lang: 'en',
+  recordIP: false,
+  serverURLs: '',
+  emojiCDN: '',
+  emojiMaps: "",
+  enableQQ: false,
+  requiredFields: requiredFields
+});</script></div></article></main><footer id="footer" style="background-image: url(https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images)" data-type="photo"><div id="footer-wrap"><div class="copyright">&copy;2018 - 2021 By NonupleBroken</div><div class="framework-info"><span>Driven </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div><div class="footer_custom_text">Welcome and have fun!</div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="Read Mode"></i><i class="fa fa-plus" id="font_plus" title="Increase font size"></i><i class="fa fa-minus" id="font_minus" title="Decrease font size"></i><i class="darkmode fa fa-moon-o" id="darkmode" title="Dark Mode"></i></div><div id="rightside-config-show"><div id="rightside_config" title="Setting"><i class="fa fa-cog" aria-hidden="true"></i></div><a id="to_comment" href="#post-comment" title="Scroll to comment"><i class="scroll_to_comment fa fa-comments">  </i></a><i class="fa fa-list-ul close" id="mobile-toc-button" title="Table of Contents" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="Back to top" aria-hidden="true"></i></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script id="canvas_nest" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="/js/third-party/canvas-nest.js"></script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@3/instantpage.min.js" type="module"></script><script src="/js/search/local-search.js"></script></body></html>

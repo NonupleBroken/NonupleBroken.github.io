@@ -1,0 +1,150 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>eazy_dump | NonupleBroken</title><meta name="description" content="这是 hctf2018 的一道取证题。 链接：https:&#x2F;&#x2F;pan.baidu.com&#x2F;s&#x2F;1RUpt-IXUIpqH6SW91jRCcg  分析 mem.data 得到一个两百多 MB 的文件：mem.data，还是使用我们的老朋友 volatility 内存取证工具。 首先用 imageinfo 查看镜像信息： 1$ volatility -f mem.data imageinfo 1234"><meta name="keywords" content="Forensics,Volatility,gimp"><meta name="author" content="NonupleBroken"><meta name="copyright" content="NonupleBroken"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="https://i.loli.net/2020/06/15/yNt2zEPRqjwh7IO.png"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="dns-prefetch" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="crossorigin"/><link rel="dns-prefetch" href="https://fonts.googleapis.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="dns-prefetch" href="//busuanzi.ibruce.info"/><meta name="twitter:card" content="summary"><meta name="twitter:title" content="eazy_dump"><meta name="twitter:description" content="这是 hctf2018 的一道取证题。 链接：https:&#x2F;&#x2F;pan.baidu.com&#x2F;s&#x2F;1RUpt-IXUIpqH6SW91jRCcg  分析 mem.data 得到一个两百多 MB 的文件：mem.data，还是使用我们的老朋友 volatility 内存取证工具。 首先用 imageinfo 查看镜像信息： 1$ volatility -f mem.data imageinfo 1234"><meta name="twitter:image" content="https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images&amp;r=eazy_dump"><meta property="og:type" content="article"><meta property="og:title" content="eazy_dump"><meta property="og:url" content="https://nonuplebroken.com/2018/11/13/eazy-dump/"><meta property="og:site_name" content="NonupleBroken"><meta property="og:description" content="这是 hctf2018 的一道取证题。 链接：https:&#x2F;&#x2F;pan.baidu.com&#x2F;s&#x2F;1RUpt-IXUIpqH6SW91jRCcg  分析 mem.data 得到一个两百多 MB 的文件：mem.data，还是使用我们的老朋友 volatility 内存取证工具。 首先用 imageinfo 查看镜像信息： 1$ volatility -f mem.data imageinfo 1234"><meta property="og:image" content="https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images&amp;r=eazy_dump"><meta property="article:published_time" content="2018-11-13T13:20:00.000Z"><meta property="article:modified_time" content="2020-06-16T07:26:41.911Z"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>var autoChangeMode = 'false'
+var t = Cookies.get("theme")
+if (autoChangeMode == '1'){
+  var isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+  var isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+  var isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined){
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport){
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour < 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+  }
+  } else if (t == 'light') activateLightMode()
+  else activateDarkMode()
+
+} else if (autoChangeMode == '2'){
+  now = new Date();
+  hour = now.getHours();
+  isNight = hour < 6 || hour >= 18
+  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode() 
+} else {
+  if ( t == 'dark' ) activateDarkMode()
+  else if ( t == 'light') activateLightMode()
+}
+
+function activateDarkMode(){
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
+  }
+}
+function activateLightMode(){
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
+  }
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><link rel="canonical" href="https://nonuplebroken.com/2018/11/13/eazy-dump/"><link rel="prev" title="RSA选择明密文攻击" href="https://nonuplebroken.com/2018/11/21/RSA%E9%80%89%E6%8B%A9%E6%98%8E%E5%AF%86%E6%96%87%E6%94%BB%E5%87%BB/"><link rel="next" title="RSA基础" href="https://nonuplebroken.com/2018/11/12/RSA%E5%9F%BA%E7%A1%80/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: true,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: {"bookmark":{"message_prev":"Press","message_next":"to bookmark this page"},"chs_to_cht":"Traditional Chinese Activated Manually","cht_to_chs":"Simplified Chinese Activated Manually","day_to_night":"Dark Mode Activated Manually","night_to_day":"Light Mode Activated Manually","bgLight":"#49b1f5","bgDark":"#2d3035","position":"top-center"},
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  highlightShrink: 'false',
+  isFontAwesomeV5: false,
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+  
+}</script><script>var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isSidebar: true  
+  }</script><noscript><style>
+#page-header {
+  opacity: 1
+}
+.justified-gallery img{
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 4.2.1"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="https://i.loli.net/2020/06/15/imOPRpIQl1aNYSH.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">28</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">37</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user"></i><span> About</span></a></div></div></div></div><i class="fa fa-arrow-right on" id="toggle-sidebar" aria-hidden="true">     </i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#分析-memdata"><span class="toc-number">1.</span> <span class="toc-text"> 分析 mem.data</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取-dump-内存时的屏幕信息"><span class="toc-number">2.</span> <span class="toc-text"> 获取 dump 内存时的屏幕信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分析-wordpad"><span class="toc-number">3.</span> <span class="toc-text"> 分析 wordpad</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分析-mspaint"><span class="toc-number">4.</span> <span class="toc-text"> 分析 mspaint</span></a></li></ol></div></div></div><div id="body-wrap"><div class="post-bg" id="nav" style="background-image: url(https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images)"><div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">NonupleBroken</a></span><span class="pull_right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fa fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user"></i><span> About</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span></span></div><div id="post-info"><div id="post-title"><div class="posttitle">eazy_dump</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="Created 2018-11-13 21:20:00"><i class="fa fa-calendar" aria-hidden="true"></i> Created 2018-11-13</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="Updated 2020-06-16 15:26:41"><i class="fa fa-history" aria-hidden="true"></i> Updated 2020-06-16</span></time><span class="post-meta__categories"><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/Forensics/">Forensics</a></span></div><div class="meta-secondline"> </div><div class="meta-thirdline"><span class="post-meta-pv-cv"><i class="fa fa-eye post-meta__icon" aria-hidden="true"> </i><span>Post View:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-commentcount"></span></div></div></div></div><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><p>这是 hctf2018 的一道取证题。</p>
+<p>链接：<a href="https://pan.baidu.com/s/1RUpt-IXUIpqH6SW91jRCcg" target="_blank" rel="noopener">https://pan.baidu.com/s/1RUpt-IXUIpqH6SW91jRCcg</a></p>
+<h2 id="分析-memdata"><a class="markdownIt-Anchor" href="#分析-memdata"></a> 分析 mem.data</h2>
+<p>得到一个两百多 MB 的文件：<code>mem.data</code>，还是使用我们的老朋友 <code>volatility</code> 内存取证工具。</p>
+<p>首先用 <code>imageinfo</code> 查看镜像信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ volatility -f mem.data imageinfo</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Volatility Foundation Volatility Framework 2.6</span><br><span class="line">INFO    : volatility.debug    : Determining profile based on KDBG search...</span><br><span class="line">          Suggested Profile(s) : Win7SP1x64, Win7SP0x64, Win2008R2SP0x64, Win2008R2SP1x64_23418, Win2008R2SP1x64, Win7SP1x64_23418</span><br><span class="line">                     AS Layer1 : WindowsAMD64PagedMemory (Kernel AS)</span><br><span class="line">                     AS Layer2 : FileAddressSpace (&#x2F;root&#x2F;Documents&#x2F;CTF&#x2F;hctf2018&#x2F;misc&#x2F;eazy_dump&#x2F;mem.data)</span><br><span class="line">                      PAE type : No PAE</span><br><span class="line">                           DTB : 0x187000L</span><br><span class="line">                          KDBG : 0xf80004035070L</span><br><span class="line">          Number of Processors : 4</span><br><span class="line">     Image Type (Service Pack) : 0</span><br><span class="line">                KPCR for CPU 0 : 0xfffff80004036d00L</span><br><span class="line">                KPCR for CPU 1 : 0xfffff880009ee000L</span><br><span class="line">                KPCR for CPU 2 : 0xfffff88004568000L</span><br><span class="line">                KPCR for CPU 3 : 0xfffff880045dd000L</span><br><span class="line">             KUSER_SHARED_DATA : 0xfffff78000000000L</span><br><span class="line">           Image date and time : 2018-11-07 08:26:52 UTC+0000</span><br><span class="line">     Image local date and time : 2018-11-07 16:26:52 +0800</span><br></pre></td></tr></table></figure>
+<p>发现这可能是 Win7SP1x64 的系统。</p>
+<p>然后用 <code>pslist</code> 扫描进程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ volatility -f mem.data --profile&#x3D;Win7SP1x64 pslist</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Volatility Foundation Volatility Framework 2.6</span><br><span class="line">Offset(V)          Name                    PID   PPID   Thds     Hnds   Sess  Wow64 Start                          Exit                          </span><br><span class="line">------------------ -------------------- ------ ------ ------ -------- ------ ------ ------------------------------ ------------------------------</span><br><span class="line">0xfffffa8003344390 wordpad.exe            1804   1696      3      120      1      0 2018-11-07 08:15:35 UTC+0000</span><br><span class="line">0xfffffa8000d9ab30 MineSweeper.ex          312   1696      9      208      1      0 2018-11-07 08:15:39 UTC+0000</span><br><span class="line">0xfffffa8002de1560 mspaint.exe            2768   1696      6      122      1      0 2018-11-07 08:16:05 UTC+0000</span><br><span class="line">0xfffffa8000cfeb30 cmd.exe                2824   1356      0 --------      0      0 2018-11-07 08:26:51 UTC+0000   2018-11-07 08:26:52 UTC+0000</span><br></pre></td></tr></table></figure>
+<p>发现了 <code>wordpad</code> 记事本、<code>MineSweeper</code> 扫雷、<code>mspaint</code> 画图、<code>cmd</code> 这几个可能有线索的进程。用 <code>memdump</code> 全部 dump 下来进行分析：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ volatility -f mem.data --profile&#x3D;Win7SP1x64 memdump -p 1804,2768,312,2824 -D .&#x2F;data</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Volatility Foundation Volatility Framework 2.6</span><br><span class="line">************************************************************************</span><br><span class="line">Writing wordpad.exe [  1804] to 1804.dmp</span><br><span class="line">************************************************************************</span><br><span class="line">Writing mspaint.exe [  2768] to 2768.dmp</span><br><span class="line">************************************************************************</span><br><span class="line">Writing MineSweeper.ex [  312] to 312.dmp</span><br><span class="line">************************************************************************</span><br><span class="line">Writing cmd.exe [  2824] to 2824.dmp</span><br></pre></td></tr></table></figure>
+<p>经过分析之后并没有什么线索。</p>
+<p>使用 cmdline、netscan 搜索命令行、套接字也没什么信息。</p>
+<h2 id="获取-dump-内存时的屏幕信息"><a class="markdownIt-Anchor" href="#获取-dump-内存时的屏幕信息"></a> 获取 dump 内存时的屏幕信息</h2>
+<p>这时候要换一种思路，试试能不能获得 dump 该内存时的屏幕信息，寻找线索。</p>
+<p>可以用到 linux 下的一款图形工具 <code>gimp</code>。</p>
+<p>将刚刚 dump 下来的进程后缀名改为data，随意打开一个，例如 <code>mspaint.data</code>。一般电脑屏幕的分辨率是 <code>1920x1080</code>，按此更改图片的宽和高。调整偏移值大小，然后细微调整，在 <code>46981633</code> 处得到完整的图片。</p>
+<p><img src="https://i.loli.net/2020/06/11/MVQp1nKUxLRZduo.png" alt="eazy_dump_1" /></p>
+<p>注意这里宽不能有一点偏差，否则无法获得正确信息，高无所谓。</p>
+<p><img src="https://i.loli.net/2020/06/11/Jlr1foevCgOHsQE.png" alt="eazy_dump_2" /></p>
+<p>可以看到运行了扫雷、记事本和画图。记事本中有 <code>im so boring</code>，后面可能还有一些内容，被扫雷挡住无法看到。画图中完全不知有什么内容。</p>
+<h2 id="分析-wordpad"><a class="markdownIt-Anchor" href="#分析-wordpad"></a> 分析 wordpad</h2>
+<p>用 <code>strings -e l</code> 单字小端位序的方式输出进程 <code>wordpad</code> 中 <code>im so boring</code> 前后的字符串查找线索。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ strings -e l 1804.data | grep -C 5 im\ so\ boring</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ijaya</span><br><span class="line">Vani</span><br><span class="line">DokChampa</span><br><span class="line">DaunPenh</span><br><span class="line">im so boring ......   art?? </span><br><span class="line">im so boring ......   art?? </span><br><span class="line">Malgun Gothic</span><br><span class="line">Shonar Bangla</span><br><span class="line">im so boring ......</span><br><span class="line">btw ..</span><br><span class="line">ike my art??</span><br><span class="line"> btw ..</span><br><span class="line">do you like my art??</span><br><span class="line"> !&quot;#$%&amp;&#39;()*+,-.&#x2F;0123456789:;&lt;&#x3D;&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_&#96;abcdefghijklmnopqrstuvwxyz&#123;|&#125;~</span><br></pre></td></tr></table></figure>
+<p>可以看到 <code>do you like my art??</code> 的提示，线索指向了 <code>mspaint</code>。</p>
+<h2 id="分析-mspaint"><a class="markdownIt-Anchor" href="#分析-mspaint"></a> 分析 mspaint</h2>
+<p>通过桌面图片可以得到 mspaint 的画布宽为 <code>1457</code>。</p>
+<p>然后用 <code>gimp</code> 打开 <code>mspaint.data</code>，设置宽为 <code>1457</code>，高度随意。不断调整偏移值最后在 <code>152281183</code> 处得到图片：</p>
+<p><img src="https://i.loli.net/2020/06/11/mzKb9nat1dhjg45.png" alt="eazy_dump_3" /></p>
+<p>最终得到 flag：<br />
+<code>hctf{big_brother_is_watching_you}</code></p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">NonupleBroken</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://nonuplebroken.com/2018/11/13/eazy-dump/">https://nonuplebroken.com/2018/11/13/eazy-dump/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Forensics/">Forensics</a><a class="post-meta__tags" href="/tags/Volatility/">Volatility</a><a class="post-meta__tags" href="/tags/gimp/">gimp</a></div><div class="post_share"><div class="social-share" data-image="https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images&amp;r=2021津门杯justOCB" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"/><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script></div></div><div class="post-reward"><a class="reward-button button--primary button--animated"> <i class="fa fa-qrcode"></i> Donate<div class="reward-main"><ul class="reward-all"><li class="reward-item"><img class="post-qr-code__img" src="https://i.loli.net/2020/06/15/IhSBM3Q576veJYy.png" alt="WeChat Pay"/><div class="post-qr-code__desc">WeChat Pay</div></li><li class="reward-item"><img class="post-qr-code__img" src="https://i.loli.net/2020/06/15/SI8vipmr2UCxbtR.png" alt="Alipay"/><div class="post-qr-code__desc">Alipay</div></li></ul></div></a></div><nav class="pagination_post" id="pagination"><div class="prev-post pull_left"><a href="/2018/11/21/RSA%E9%80%89%E6%8B%A9%E6%98%8E%E5%AF%86%E6%96%87%E6%94%BB%E5%87%BB/"><img class="prev_cover" src="https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images&amp;r=RSA选择明密文攻击" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">RSA选择明密文攻击</div></div></a></div><div class="next-post pull_right"><a href="/2018/11/12/RSA%E5%9F%BA%E7%A1%80/"><img class="next_cover" src="https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images&amp;r=RSA基础" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">RSA基础</div></div></a></div></nav><hr><div id="post-comment"><div class="comment_headling"><i class="fa fa-comments fa-fw" aria-hidden="true"></i><span> Comment</span></div><div class="vcomment" id="vcomment"></div><script src="https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script><script>var requestSetting = function (from,set) {
+  var from = from
+  var setting = set.split(',').filter(function(item){
+  return from.indexOf(item) > -1
+  });
+  setting = setting.length == 0 ? from :setting;
+  return setting
+}
+
+var guestInfo = requestSetting(['nick','mail','link'],'nick,mail,link')
+var requiredFields = requestSetting(['nick','mail','link'],'nick')
+
+window.valine = new Valine({
+  el:'#vcomment',
+  appId: 'W5gBlULjrFdLa2PMBAsaecvL-gzGzoHsz',
+  appKey: 'e7tEGcjJPX1J35kwFEqnWK0X',
+  notify: false,
+  verify: false,
+  placeholder: 'Please leave your footprints',
+  avatar: 'identicon',
+  meta: guestInfo,
+  pageSize: '10',
+  lang: 'en',
+  recordIP: false,
+  serverURLs: '',
+  emojiCDN: '',
+  emojiMaps: "",
+  enableQQ: false,
+  requiredFields: requiredFields
+});</script></div></article></main><footer id="footer" style="background-image: url(https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images)" data-type="photo"><div id="footer-wrap"><div class="copyright">&copy;2018 - 2021 By NonupleBroken</div><div class="framework-info"><span>Driven </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div><div class="footer_custom_text">Welcome and have fun!</div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="Read Mode"></i><i class="fa fa-plus" id="font_plus" title="Increase font size"></i><i class="fa fa-minus" id="font_minus" title="Decrease font size"></i><i class="darkmode fa fa-moon-o" id="darkmode" title="Dark Mode"></i></div><div id="rightside-config-show"><div id="rightside_config" title="Setting"><i class="fa fa-cog" aria-hidden="true"></i></div><a id="to_comment" href="#post-comment" title="Scroll to comment"><i class="scroll_to_comment fa fa-comments">  </i></a><i class="fa fa-list-ul close" id="mobile-toc-button" title="Table of Contents" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="Back to top" aria-hidden="true"></i></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script id="canvas_nest" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="/js/third-party/canvas-nest.js"></script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@3/instantpage.min.js" type="module"></script><script src="/js/search/local-search.js"></script></body></html>

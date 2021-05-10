@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /2018/
+Allow: /2019/
+Allow: /2020/
+Sitemap: https://nonuplebroken.com/sitemap.xml
